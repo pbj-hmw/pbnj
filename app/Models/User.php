@@ -16,6 +16,6 @@ class User extends Authenticatable
 
     public function authCode()
     {
-        return $this->hasOne('App\Models\AuthCode');
+        return $this->hasMany('App\Models\AuthCode');
     }
 }
