@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->primary('id');
             $table->string('username')->unique();
             $table->string('phone_number')->unique();
+            $table->string('access_token')->nullable();
             $table->timestamps();
         });
     }

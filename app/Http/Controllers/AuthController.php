@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AccessToken;
 use App\Models\AuthCode;
 use App\Models\User;
 use Bugsnag;
@@ -27,14 +26,11 @@ class AuthController extends Controller
 
         $user = User::create([
             'username' => $request->input('username'),
-            'phone_number' => $request->input('phone_number')
-        ]);
-        $access_token = AccessToken::create([
-            'user_id' => $user->id,
-            'access_token' => Uuid::generate(4)->string,
+            'phone_number' => $request->input('phone_number'),
+            'access_token' => Uuid::generate(4)->string
         ]);
 
-        return [$user, $access_token];
+        return $user;
     }
 
     public function postLogin(Request $request)
@@ -113,12 +109,12 @@ class AuthController extends Controller
             abort(401, 'Unauthorized');
         }
 
-        $access_token = AccessToken::firstOrNew(['user_id' => $user->id], ['access_token' => Uuid::generate(4)->string]);
-        $access_token->save();
+        $user->access_token = Uuid::generate(4)->string;
+        $user->save();
 
         $code->valid = false;
         $code->save();
 
-        return [$user, $access_token];
+        return $user;
     }
 }

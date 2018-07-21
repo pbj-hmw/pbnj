@@ -13,7 +13,8 @@ class User extends Authenticatable
     protected $fillable = [
         'id',
         'username',
-        'phone_number'
+        'phone_number',
+        'access_token'
     ];
 
     public $incrementing = false;
@@ -21,10 +22,5 @@ class User extends Authenticatable
     public function authCode()
     {
         return $this->hasMany('App\Models\AuthCode');
-    }
-
-    public function accessToken()
-    {
-        return $this->hasOne('App\Models\AccessToken');
     }
 }
