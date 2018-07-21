@@ -19,7 +19,8 @@ class Show extends Model
         'title',
         'description',
         'run_time_in_minutes',
-        'show_image_header'
+        'show_image_header',
+        'calories'
     ];
 
     public $dates = [
