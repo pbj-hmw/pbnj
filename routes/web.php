@@ -11,6 +11,14 @@
 |
 */
 
+use App\Models\Show;
+
 Route::get('/', function () {
-    return view('welcome');
+    return Show::create([
+        'start_time' => '2018-07-21 21:44:10',
+        'title' => "OP",
+        'description' => "Something",
+        'run_time_in_minutes' => 30,
+        'show_image_header' => "https"
+    ]);
 });
