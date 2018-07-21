@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccessToken;
 use App\Models\AuthCode;
 use App\Models\User;
 use Bugsnag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Services_Twilio;
-use Services_Twilio_RestException;
+use Twilio\Exceptions\TwilioException;
+use Twilio\Rest\Client;
 use Validator;
+use Webpatser\Uuid\Uuid;
 
 class AuthController extends Controller
 {
     public function postRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'string|max:255|required',
-            'phone_number' => 'numeric|size:11|unique:users,phone_number|required'
+            'username' => 'string|max:255|unique:users,username|required',
+            'phone_number' => ['numeric', 'regex:/^[0][1-9]\d{10}$|^[1-9]\d{10}$/', 'unique:users,phone_number', 'required']
         ]);
         if ($validator->fails()) {
             abort(400, $validator->errors());
@@ -27,14 +29,18 @@ class AuthController extends Controller
             'username' => $request->input('username'),
             'phone_number' => $request->input('phone_number')
         ]);
+        $access_token = AccessToken::create([
+            'user_id' => $user->id,
+            'access_token' => Uuid::generate(4)->string,
+        ]);
 
-        return $user;
+        return [$user, $access_token];
     }
 
     public function postLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'numeric|size:11|required'
+            'phone_number' => ['numeric', 'regex:/^[0][1-9]\d{10}$|^[1-9]\d{10}$/', 'required']
         ]);
         if ($validator->fails()) {
             abort(400, $validator->errors());
@@ -61,13 +67,15 @@ class AuthController extends Controller
         $message = $code->code . " is your one-time code for PBNJ (valid for 5 min).";
 
         try {
-            $client = new Services_Twilio(config('pbnj.twilio_account_sid'), config('pbnj.twilio_auth_token'));
-            $client->account->messages->sendMessage(
-                config('pbnj.twilio_number'),
-                $user->phone_number,
-                $message
+            $client = new Client(config('pbnj.twilio_account_sid'), config('pbnj.twilio_auth_token'));
+            $client->messages->create(
+                '+'.$user->phone_number,
+                array(
+                    'from' => config('pbnj.twilio_number'),
+                    'body' => $message
+                )
             );
-        } catch (Services_Twilio_RestException $exception) {
+        } catch (TwilioException $exception) {
             Bugsnag::notifyException($exception);
             abort(400, 'An error occurred while attempting to sign in.');
         }
@@ -78,7 +86,7 @@ class AuthController extends Controller
     public function postCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'string|required',
+            'phone_number' => ['numeric', 'regex:/^[0][1-9]\d{10}$|^[1-9]\d{10}$/', 'required'],
             'code' => 'string|required'
         ]);
         if ($validator->fails()) {
@@ -92,17 +100,25 @@ class AuthController extends Controller
 
         $code = AuthCode::where([
             ['user_id', $user->id],
-            ['code', $request->input('code')],
-            ['valid', true]
+            ['code', $request->input('code')]
         ])->first();
-
-        if (!is_null($code)) {
-            $now = Carbon::now();
-            if ($now->gte($code->expires)) {
-                $code->valid = false;
-                $code->save();
-                abort(401, 'Unauthorized');
-            }
+        if (is_null($code) || !$code->valid) {
+            abort(401, 'Unauthorized');
         }
+
+        $now = Carbon::now();
+        if ($now->gte($code->expires)) {
+            $code->valid = false;
+            $code->save();
+            abort(401, 'Unauthorized');
+        }
+
+        $access_token = AccessToken::firstOrNew(['user_id' => $user->id], ['access_token' => Uuid::generate(4)->string]);
+        $access_token->save();
+
+        $code->valid = false;
+        $code->save();
+
+        return [$user, $access_token];
     }
 }

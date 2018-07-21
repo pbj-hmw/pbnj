@@ -11,6 +11,10 @@ class AccessToken extends Model
         'access_token',
     ];
 
+    protected $hidden = [
+        'id',
+    ];
+
     public function user()
     {
         return $this->hasOne('App\Models\User');

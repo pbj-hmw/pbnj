@@ -14,7 +14,11 @@ use Illuminate\Http\Request;
 */
 
 Route::post('register', 'AuthController@postRegister');
+Route::post('login', 'AuthController@postLogin');
+Route::post('code', 'AuthController@postCode');
 
+/*
 Route::group(['middleware' => ['api', 'access_token']], function () {
 
 });
+*/
