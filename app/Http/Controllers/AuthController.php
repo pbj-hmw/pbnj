@@ -12,8 +12,19 @@ use Twilio\Rest\Client;
 use Validator;
 use Webpatser\Uuid\Uuid;
 
+/**
+ * Class AuthController
+ * @package App\Http\Controllers
+ */
 class AuthController extends Controller
 {
+    /**
+     * Creates a new user with a username and a 11 digit phone number.
+     *
+     * @param Request $request
+     *
+     * @return mixed
+     */
     public function postRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -24,15 +35,27 @@ class AuthController extends Controller
             abort(400, $validator->errors());
         }
 
-        $user = User::create([
-            'username' => $request->input('username'),
-            'phone_number' => $request->input('phone_number'),
-            'access_token' => Uuid::generate(4)->string
-        ]);
+        try {
+            $user = User::create([
+                'username' => $request->input('username'),
+                'phone_number' => $request->input('phone_number'),
+                'access_token' => Uuid::generate(4)->string
+            ]);
 
-        return $user;
+            return $user;
+        } catch (\Exception $exception) {
+            Bugsnag::notifyException($exception);
+            abort(400, 'An error occurred while attempting to register.');
+        }
     }
 
+    /**
+     * Sends a 6 digit code to the phone number.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function postLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -79,6 +102,13 @@ class AuthController extends Controller
         return response('', 200);
     }
 
+    /**
+     * Exchanges a 6 digit code for a new access token.
+     *
+     * @param Request $request
+     *
+     * @return User
+     */
     public function postCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -109,11 +139,39 @@ class AuthController extends Controller
             abort(401, 'Unauthorized');
         }
 
-        $user->access_token = Uuid::generate(4)->string;
-        $user->save();
-
         $code->valid = false;
         $code->save();
+
+        try {
+            $user->access_token = Uuid::generate(4)->string;
+            $user->save();
+        } catch (\Exception $exception) {
+            Bugsnag::notifyException($exception);
+            abort(400, 'An error occurred while generating a new access token');
+        }
+
+        return $user;
+    }
+
+    /**
+     * Updates a users phone number.
+     *
+     * @param Request $request
+     *
+     * @return User
+     */
+    public function putPhoneNumber(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => ['numeric', 'regex:/^[0][1-9]\d{10}$|^[1-9]\d{10}$/', 'unique:users,phone_number', 'required']
+        ]);
+        if ($validator->fails()) {
+            abort(400, $validator->errors());
+        }
+
+        $user = User::find($request->input('user_id'));
+        $user->phone_number = $request->input('phone_number');
+        $user->save();
 
         return $user;
     }
