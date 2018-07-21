@@ -18,4 +18,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\AuthCode');
     }
+
+    public function accessToken()
+    {
+        return $this->hasOne('App\Models\AccessToken');
+    }
 }
