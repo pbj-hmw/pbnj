@@ -18,7 +18,8 @@ class RecipeItem extends Model
         'updated_at',
         'title',
         'description',
-        'image_link'
+        'image_link',
+        'importance'
     ];
 
     public $dates = [
