@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 
-class Show extends Model
+use App\Traits\Uuids;
+
+class RecipeItem extends Model
 {
     use Uuids;
 
@@ -15,22 +16,19 @@ class Show extends Model
         'id',
         'created_at',
         'updated_at',
-        'start_time',
         'title',
         'description',
-        'runtime',
-        'show_image_header',
-        'calories'
+        'image_link',
+        'importance'
     ];
 
     public $dates = [
         'created_at',
-        'updated_at',
-        'start_time'
+        'updated_at'
     ];
 
-    public function recipeItems()
+    public function shows()
     {
-        return $this->belongsToMany('App\Models\RecipeItem');
+        return $this->belongsToMany('App\Models\Show');
     }
 }
