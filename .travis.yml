@@ -1,0 +1,16 @@
+language: php
+php:
+  - 7.2
+before_script:
+  - cp .env.travis .env
+  - mysql -e 'create database homestead_test;'
+  - composer self-update
+  - composer install --no-interaction
+  - yarn install
+script:
+  - php artisan key:generate
+  - php artisan clear-compiled
+  - find . -path ./vendor -prune -o -name "*.php" -print0 | xargs -0 -n1 php -l
+  - "./vendor/bin/phpcs -n --standard=PSR2 app"
+  - "./node_modules/sass-lint/bin/sass-lint.js 'resources/assets/sass/*.scss' -v -q"
+  - yarn run production
