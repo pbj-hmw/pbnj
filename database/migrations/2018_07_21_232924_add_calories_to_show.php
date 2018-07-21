@@ -15,6 +15,8 @@ class AddCaloriesToShow extends Migration
     {
         Schema::table('shows', function (Blueprint $table) {
             $table->unsignedInteger('calories');
+            $table->dropColumn('run_time_in_minutes');
+            $table->string('runtime');
         });
     }
 
@@ -27,6 +29,8 @@ class AddCaloriesToShow extends Migration
     {
         Schema::table('shows', function (Blueprint $table) {
             $table->dropColumn('calories');
+            $table->dropColumn('runtime');
+            $table->unsignedInteger('run_time_in_minutes');
         });
     }
 }

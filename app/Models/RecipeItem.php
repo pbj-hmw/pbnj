@@ -27,7 +27,8 @@ class RecipeItem extends Model
         'updated_at'
     ];
 
-    public function shows() {
+    public function shows()
+    {
         return $this->belongsToMany('App\Models\Show');
     }
 }

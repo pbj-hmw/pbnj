@@ -18,7 +18,7 @@ class Show extends Model
         'start_time',
         'title',
         'description',
-        'run_time_in_minutes',
+        'runtime',
         'show_image_header',
         'calories'
     ];
@@ -29,7 +29,8 @@ class Show extends Model
         'start_time'
     ];
 
-    public function recipeItems() {
+    public function recipeItems()
+    {
         return $this->belongsToMany('App\Models\RecipeItem');
     }
 }
