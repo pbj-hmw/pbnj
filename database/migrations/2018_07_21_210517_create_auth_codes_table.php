@@ -15,7 +15,7 @@ class CreateAuthCodesTable extends Migration
     {
         Schema::create('auth_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('code', 6);
             $table->dateTime('expires');
