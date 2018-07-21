@@ -11,8 +11,6 @@
 |
 */
 
-use App\Models\Show;
-use App\Models\RecipeItem;
-
 Route::get('/', function () {
+    return view('welcome');
 });
