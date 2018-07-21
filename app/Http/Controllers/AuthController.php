@@ -9,7 +9,6 @@ class AuthController extends Controller
 {
     private function generateCode($user)
     {
-
     }
 
     public function postRegister(Request $request)
@@ -30,6 +29,5 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-
     }
 }
