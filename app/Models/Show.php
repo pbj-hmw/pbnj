@@ -33,4 +33,8 @@ class Show extends Model
     {
         return $this->belongsToMany('App\Models\RecipeItem');
     }
+
+    public function steps() {
+        return $this->hasMany('App\Models\Step');
+    }
 }

@@ -11,6 +11,8 @@
 |
 */
 
+use App\Models\Show;
+
 Route::get('/', function () {
-    return view('welcome');
+    return Show::with('steps')->get();
 });
