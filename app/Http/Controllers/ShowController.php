@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Validator;
 use Webpatser\Uuid\Uuid;
 
+use App\Models\Step;
+
 /**
  * Class AuthController
  * @package App\Http\Controllers
@@ -88,7 +90,7 @@ class ShowController extends Controller
             abort(400, "Unable to add recipe item.");
         }
 
-        $show->recipeItems()->attatch($item_result->item->id);
+        $show->recipeItems()->attach($item_result->recipe_item->id);
 
         //Refresh data by retrieving the show again
         $result = $this->showService->getShow($show_id);
@@ -128,6 +130,38 @@ class ShowController extends Controller
         $show->finished = true;
         $show->save();
 
+        return $show;
+    }
+
+    public function postShowStep(Request $request, $show_id) {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'step_number' => 'required',
+            'show_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            abort(400, $validator->errors());
+        }
+
+        $result = $this->showService->getShow($show_id);
+
+        if (!$result->success) {
+            abort($result->status_code, $result->error);
+        }
+
+        $properties = $request->all();
+
+        $step = Step::create($properties);
+
+        $result = $this->showService->getShow($show_id);
+
+        if (!$result->success) {
+            abort($result->status_code, $result->error);
+        }
+
+        $show = $result->show;
         return $show;
     }
 

@@ -8,7 +8,7 @@
 
 namespace App\Services;
 
-
+use App\Factory\ResultFactory;
 use App\Models\RecipeItem;
 
 /**
@@ -17,6 +17,13 @@ use App\Models\RecipeItem;
  */
 class RecipeItemService
 {
+    protected $resultFactory;
+
+    public function __construct(ResultFactory $resultFactory) {
+        $this->resultFactory = $resultFactory;
+    }
+
+
     /**
      *
      * Create a new recipe item
@@ -46,7 +53,7 @@ class RecipeItemService
             return $this->resultFactory->error("Could not find Recipe Item",'object', 404);
         }
 
-        return $this->resultFactory->success('recipe_item', $recipe_item);
+        return $this->resultFactory->success($recipe_item, 'recipe_item');
     }
 
 
@@ -60,6 +67,6 @@ class RecipeItemService
             return $this->resultFactory->error("Could not find Recipe Items",'object', 404);
         }
 
-        return $this->resultFactory->success('recipe_items', $recipe_items);
+        return $this->resultFactory->success($recipe_items, 'recipe_items');
     }
 }

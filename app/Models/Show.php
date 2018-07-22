@@ -38,6 +38,6 @@ class Show extends Model
 
     public function steps()
     {
-        return $this->hasMany('App\Models\Step');
+        return $this->hasMany('App\Models\Step')->orderBy('step_number', 'asc');
     }
 }
