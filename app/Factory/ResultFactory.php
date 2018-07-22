@@ -20,7 +20,7 @@ class ResultFactory
             'error'   => null
         ];
     }
-    
+
     public function error($error, $key = 'object', $status_code = 400)
     {
         return (object)[
