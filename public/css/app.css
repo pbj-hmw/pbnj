@@ -10485,7 +10485,7 @@ body {
 }
 
 .main {
-  margin-top: 125px;
+  margin-top: 50px;
 }
 
 .main h1 {
@@ -10503,7 +10503,8 @@ body {
   border: 2px solid #44c0f3;
   background-color: #fff;
   color: #44c0f3;
-  margin-right: 15px;
+  display: block;
+  margin: 10px auto;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
@@ -10515,5 +10516,27 @@ body {
   color: #fff;
   -webkit-transition: all .2s;
   transition: all .2s;
+}
+
+.mockup {
+  display: block;
+  margin: 50px auto;
+  max-height: 450px;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .main {
+    margin-top: 125px;
+  }
+
+  .buttons .btn-app {
+    display: inline-block;
+    margin: 10px 15px;
+  }
+
+  .mockup {
+    margin: 0px auto;
+  }
 }
 

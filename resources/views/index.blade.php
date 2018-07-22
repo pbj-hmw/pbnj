@@ -18,28 +18,29 @@
         <div class="col-12 col-md-6">
             <h1>Become a master chef</h1>
             <p>Home Cooked is the live mobile cooking show that gives amateur cooks an interactive opportunity to become expert chefs, right at home.</p>
+            <div class="row justify-content-md-start buttons">
+                <a class="btn btn-app" id="google" href="#">
+                    <div class="row text-left">
+                        <div class="col-3"><i class="fab fa-android fa-2x mt-2"></i></div>
+                        <div class="col-9">
+                            available on <br />
+                            <span class="font-weight-bold">Play Store</span>
+                        </div>
+                    </div>
+                </a>
+                <a class="btn btn-app active" id="apple" href="#">
+                    <div class="row text-left">
+                        <div class="col-3"><i class="fab fa-apple fa-2x mt-2"></i></div>
+                        <div class="col-9">
+                            available on <br />
+                            <span class="font-weight-bold">App Store</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="row justify-content-md-start buttons text-center text-md-left">
         <div class="col-12 col-md-6">
-            <a class="btn btn-app" id="google" href="#">
-                <div class="row text-left">
-                    <div class="col-3"><i class="fab fa-android fa-2x mt-2"></i></div>
-                    <div class="col-9">
-                        available on <br />
-                        <span class="font-weight-bold">Play Store</span>
-                    </div>
-                </div>
-            </a>
-            <a class="btn btn-app active" id="apple" href="#">
-                <div class="row text-left">
-                    <div class="col-3"><i class="fab fa-apple fa-2x mt-2"></i></div>
-                    <div class="col-9">
-                        available on <br />
-                        <span class="font-weight-bold">App Store</span>
-                    </div>
-                </div>
-            </a>
+            <img src="{{ URL::asset('img/mockuph.png') }}" class="mockup" />
         </div>
     </div>
 </div>
