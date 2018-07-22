@@ -35,7 +35,8 @@ class RecipeItemController extends Controller
     }
 
 
-    public function postRecipeItem(Request $request) {
+    public function postRecipeItem(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'description' => 'required|string',
@@ -60,10 +61,10 @@ class RecipeItemController extends Controller
         return $recipe_item;
     }
 
-    public function getRecipeItems() {
+    public function getRecipeItems()
+    {
         $items = RecipeItem::orderBy('importance', 'DESC')->get();
 
         return $items;
     }
-
 }

@@ -19,7 +19,8 @@ class RecipeItemService
 {
     protected $resultFactory;
 
-    public function __construct(ResultFactory $resultFactory) {
+    public function __construct(ResultFactory $resultFactory)
+    {
         $this->resultFactory = $resultFactory;
     }
 
@@ -31,7 +32,8 @@ class RecipeItemService
      * @param $properties array Values are default of what model expects. Check controller validation for exact.
      * @return object
      */
-    public function createRecipeItem($properties) {
+    public function createRecipeItem($properties)
+    {
         try {
             $show = RecipeItem::create($properties);
 
@@ -46,11 +48,12 @@ class RecipeItemService
      * @param $id
      * @return mixed
      */
-    public function getRecipeItem($id) {
+    public function getRecipeItem($id)
+    {
         $recipe_item = RecipeItem::find($id);
 
         if (is_null($recipe_item)) {
-            return $this->resultFactory->error("Could not find Recipe Item",'object', 404);
+            return $this->resultFactory->error("Could not find Recipe Item", 'object', 404);
         }
 
         return $this->resultFactory->success($recipe_item, 'recipe_item');
@@ -60,11 +63,12 @@ class RecipeItemService
     /**
      * @return mixed
      */
-    public function getAllRecipeItems() {
+    public function getAllRecipeItems()
+    {
         $recipe_items = RecipeItem::all();
 
         if (is_null($recipe_items)) {
-            return $this->resultFactory->error("Could not find Recipe Items",'object', 404);
+            return $this->resultFactory->error("Could not find Recipe Items", 'object', 404);
         }
 
         return $this->resultFactory->success($recipe_items, 'recipe_items');

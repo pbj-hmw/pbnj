@@ -63,33 +63,34 @@ class ShowService
         }
     }
 
-    public function getShow($id) {
+    public function getShow($id)
+    {
         $show = Show::with('recipeItems', 'steps')->find($id);
 
         if (is_null($show)) {
-            return $this->resultFactory->error("Could not find Show",'object', 404);
+            return $this->resultFactory->error("Could not find Show", 'object', 404);
         }
 
         return $this->resultFactory->success($show, 'show');
     }
 
 
-    public function getNextShow() {
+    public function getNextShow()
+    {
         $one_hour_ago = Carbon::now()->subHours(1);
         $twenty_four_hours = Carbon::now()->addHours(24);
 
         $show = Show::with('recipeItems', 'steps')
             ->where('start_time', '>', $one_hour_ago->toDateTimeString())
-            ->where('start_time','<', $twenty_four_hours->toDateTimeString())
+            ->where('start_time', '<', $twenty_four_hours->toDateTimeString())
             ->where('finished', false)
             ->orderBy('created_at', 'ASC')
             ->first();
 
         if (is_null($show)) {
-            return $this->resultFactory->error("Could not find Show",'object', 404);
+            return $this->resultFactory->error("Could not find Show", 'object', 404);
         }
 
         return $this->resultFactory->success($show, 'show');
     }
-
 }

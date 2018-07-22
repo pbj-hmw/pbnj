@@ -74,7 +74,8 @@ class ShowController extends Controller
      * @param $
      * @return mixed
      */
-    public function postShowRecipeItem($show_id, $recipe_id) {
+    public function postShowRecipeItem($show_id, $recipe_id)
+    {
         $result = $this->showService->getShow($show_id);
 
         if (!$result->success) {
@@ -102,7 +103,8 @@ class ShowController extends Controller
     }
 
 
-    public function postShowStart($show_id) {
+    public function postShowStart($show_id)
+    {
         $result = $this->showService->getShow($show_id);
 
         if (!$result->success) {
@@ -117,7 +119,8 @@ class ShowController extends Controller
         return $show;
     }
 
-    public function postShowFinished($show_id) {
+    public function postShowFinished($show_id)
+    {
         $result = $this->showService->getShow($show_id);
 
         if (!$result->success) {
@@ -132,7 +135,8 @@ class ShowController extends Controller
         return $show;
     }
 
-    public function postShowStep(Request $request, $show_id) {
+    public function postShowStep(Request $request, $show_id)
+    {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string',
             'description' => 'required|string',
