@@ -20,7 +20,8 @@ class Show extends Model
         'description',
         'runtime',
         'show_image_header',
-        'calories'
+        'calories',
+        'chat_sid'
     ];
 
     public $dates = [
