@@ -1,22 +1,26 @@
+window._ = require('lodash');
+window.Popper = require('popper.js').default;
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+try {
+    window.$ = window.jQuery = require('jquery');
 
-require('./bootstrap');
+    require('bootstrap');
+} catch (e) {}
 
-window.Vue = require('vue');
+$('#apple, #google').mouseover(function() {
+    $('#apple, #google').toggleClass('active');
+});
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+$('#apple').mouseover(function() {
+    if (!$('#apple').hasClass('active')) {
+        $('#apple').addClass('active');
+        $('#google').removeClass('active');
+    }
+});
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
-const app = new Vue({
-    el: '#app'
+$('#google').mouseover(function() {
+    if (!$('#google').hasClass('active')) {
+        $('#google').addClass('active');
+        $('#apple').removeClass('active');
+    }
 });
