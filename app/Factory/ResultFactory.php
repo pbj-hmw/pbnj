@@ -8,7 +8,6 @@
 
 namespace App\Factory;
 
-
 class ResultFactory
 {
     public function success($object, $key = 'object', $status_code = 200)

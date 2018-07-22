@@ -20,7 +20,10 @@ class Show extends Model
         'description',
         'runtime',
         'show_image_header',
-        'calories'
+        'calories',
+        'started',
+        'finished',
+        'chat_sid'
     ];
 
     public $dates = [
@@ -36,6 +39,6 @@ class Show extends Model
 
     public function steps()
     {
-        return $this->hasMany('App\Models\Step');
+        return $this->hasMany('App\Models\Step')->orderBy('step_number', 'asc');
     }
 }
