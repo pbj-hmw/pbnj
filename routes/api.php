@@ -34,5 +34,7 @@ Route::get('items', 'RecipeItemController@getRecipeItems');
 
 
 Route::group(['middleware' => ['api', 'access_token']], function () {
+    Route::post('show', 'ShowController@postShow');
+
     Route::put('phone', 'AuthController@putPhoneNumber');
 });

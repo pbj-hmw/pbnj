@@ -22,7 +22,8 @@ class Show extends Model
         'show_image_header',
         'calories',
         'started',
-        'finished'
+        'finished',
+        'chat_sid'
     ];
 
     public $dates = [
