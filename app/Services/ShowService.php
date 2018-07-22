@@ -37,5 +37,7 @@ class ShowService
         } catch (\Exception $e) {
             return $this->resultFactory->error("Unable to create new Show");
         }
+
+        //TODO: Create Twilio chat to associate to a chat.
     }
 }
