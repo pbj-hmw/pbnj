@@ -209,4 +209,44 @@ class ShowController extends Controller
 
         return $result->show;
     }
+
+    /**
+     * Gets the current step of the show.
+     *
+     * @param integet $show_id ID of the show.
+     *
+     * @return Step
+     */
+    public function getCurrentStep($show_id)
+    {
+        $result = $this->showService->getShow($show_id);
+        if (!$result->success) {
+            abort($result->status_code, $result->error);
+        }
+        $show = $result->show;
+
+        if (is_null($show->current_step_id)) {
+            $show->current_step_id = $show->steps[0]->id;
+            $show->save();
+        }
+        return $show->currentStep;
+    }
+
+    public function putNextStep($show_id)
+    {
+        $result = $this->showService->getShow($show_id);
+        if (!$result->success) {
+            abort($result->status_code, $result->error);
+        }
+        $show = $result->show;
+
+        $next_step_number = $show->currentStep->step_number + 1;
+        $next_step = Step::where('show_id', $show->id)->where('step_number', $next_step_number)->first();
+        if (!is_null($next_step)) {
+            $show->current_step_id = $next_step->id;
+            $show->save();
+            return $next_step;
+        }
+        return $show->currentStep;
+    }
 }

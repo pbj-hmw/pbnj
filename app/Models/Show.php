@@ -41,4 +41,9 @@ class Show extends Model
     {
         return $this->hasMany('App\Models\Step')->orderBy('step_number', 'asc');
     }
+
+    public function currentStep()
+    {
+        return $this->hasOne('App\Models\Step', 'id', 'current_step_id');
+    }
 }
