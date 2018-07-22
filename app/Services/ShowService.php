@@ -11,6 +11,8 @@ namespace App\Services;
 
 use App\Factory\ResultFactory;
 
+use App\Models\Show;
+
 class ShowService
 {
     protected $resultFactory;
@@ -19,7 +21,23 @@ class ShowService
         $this->resultFactory = $resultFactory;
     }
 
-    public function createShow($properties) {
 
+    /**
+     *
+     * Create a new Show
+     *
+     * @param $properties array Values are default of what model expects. Check controller validation for exact.
+     * @return object
+     */
+    public function createShow($properties) {
+        try {
+            $show = Show::create($properties);
+
+            return $this->resultFactory->success($show, 'show');
+        } catch (\Exception $e) {
+            return $this->resultFactory->error("Unable to create new Show");
+        }
+
+        //TODO: Create Twilio chat to associate to a chat.
     }
 }
