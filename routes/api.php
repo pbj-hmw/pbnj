@@ -26,7 +26,9 @@ Route::post('show/{show_id}/step', 'ShowController@postShowStep');
 
 Route::get('show/next', 'ShowController@getNextShow');
 Route::get('show/{show_id}', 'ShowController@getShow');
+Route::get('show/{show_id}/step', 'ShowController@getCurrentStep');
 
+Route::put('show/{show_id}/step', 'ShowController@putNextStep');
 
 Route::post('item', 'RecipeItemController@postRecipeItem');
 

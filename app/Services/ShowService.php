@@ -65,7 +65,7 @@ class ShowService
 
     public function getShow($id)
     {
-        $show = Show::with('recipeItems', 'steps')->find($id);
+        $show = Show::with('recipeItems', 'steps', 'currentStep')->find($id);
 
         if (is_null($show)) {
             return $this->resultFactory->error("Could not find Show", 'object', 404);
