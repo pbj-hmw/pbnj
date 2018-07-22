@@ -17,8 +17,8 @@ Route::post('register', 'AuthController@postRegister');
 Route::post('login', 'AuthController@postLogin');
 Route::post('code', 'AuthController@postCode');
 
-Route::post('show', 'ShowController@postShow');
-
 Route::group(['middleware' => ['api', 'access_token']], function () {
+    Route::post('show', 'ShowController@postShow');
+
     Route::put('phone', 'AuthController@putPhoneNumber');
 });

@@ -14,7 +14,7 @@ class AddShowChatSid extends Migration
     public function up()
     {
         Schema::table('shows', function (Blueprint $table) {
-            $table->string('chat_sid');
+            $table->string('chat_sid')->nullable();
         });
     }
 

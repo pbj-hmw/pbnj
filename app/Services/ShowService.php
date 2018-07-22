@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Factory\ResultFactory;
 use App\Models\Show;
 use App\Services\TwilioService;
+use Bugsnag;
 
 /**
  * Class ShowService
@@ -54,8 +55,9 @@ class ShowService
             $show->save();
 
             return $this->resultFactory->success($show, 'show');
-        } catch (\Exception $e) {
-            return $this->resultFactory->error("Unable to create new Show");
+        } catch (\Exception $exception) {
+            Bugsnag::notifyException($exception);
+            return $this->resultFactory->error("Unable to create new show.");
         }
     }
 }

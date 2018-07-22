@@ -49,9 +49,8 @@ class ShowController extends Controller
         $properties = $request->all();
 
         $result = $this->showService->createShow($properties);
-
         if (!$result->success) {
-            abort(400, $result->error);
+            abort($result->status_code, $result->error);
         }
 
         $show = $result->show;
