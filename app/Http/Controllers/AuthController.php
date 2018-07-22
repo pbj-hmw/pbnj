@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AuthCode;
 use App\Models\User;
+use App\Services\TwilioService;
 use Bugsnag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Twilio\Exceptions\TwilioException;
-use Twilio\Rest\Client;
 use Validator;
 use Webpatser\Uuid\Uuid;
 
@@ -18,6 +17,21 @@ use Webpatser\Uuid\Uuid;
  */
 class AuthController extends Controller
 {
+    /**
+     * @var TwilioService
+     */
+    protected $twilioService;
+
+    /**
+     * AuthController constructor.
+     *
+     * @param TwilioService $twilioService
+     */
+    public function __construct(TwilioService $twilioService)
+    {
+        $this->twilioService = $twilioService;
+    }
+
     /**
      * Creates a new user with a username and a 11 digit phone number.
      *
@@ -76,29 +90,10 @@ class AuthController extends Controller
             $existing_code->save();
         }
 
-        $code = AuthCode::create([
-            'user_id' => $user->id,
-            'code' => strval(mt_rand(100000, 999999)),
-            'expires' => Carbon::now()->addMinutes(5),
-            'valid' => true
-        ]);
-
-        $message = $code->code . " is your one-time code for PBNJ (valid for 5 min).";
-
-        try {
-            $client = new Client(config('pbnj.twilio_account_sid'), config('pbnj.twilio_auth_token'));
-            $client->messages->create(
-                '+'.$user->phone_number,
-                array(
-                    'from' => config('pbnj.twilio_number'),
-                    'body' => $message
-                )
-            );
-        } catch (TwilioException $exception) {
-            Bugsnag::notifyException($exception);
-            abort(400, 'An error occurred while attempting to sign in.');
+        $send_code = $this->twilioService->sendLoginCode($user);
+        if (!$send_code->success) {
+            abort($send_code->status_code, $send_code->error);
         }
-
         return response('', 200);
     }
 
