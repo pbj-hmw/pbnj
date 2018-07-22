@@ -11,5 +11,7 @@ namespace App\Services;
 
 class ShowService
 {
-    
+    public function createShow($properties) {
+
+    }
 }
